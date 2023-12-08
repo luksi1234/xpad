@@ -2209,13 +2209,17 @@ static int xpad_probe(struct usb_interface *intf, const struct usb_device_id *id
 	struct usb_endpoint_descriptor *ep_irq_in, *ep_irq_out;
 	int i, error;
 
+	printk(KERN_ALERT "[xpad] xpad_probe");
+
 	if (intf->cur_altsetting->desc.bNumEndpoints != 2)
 		return -ENODEV;
 
 	for (i = 0; xpad_device[i].idVendor; i++) {
 		if ((le16_to_cpu(udev->descriptor.idVendor) == xpad_device[i].idVendor) &&
-		    (le16_to_cpu(udev->descriptor.idProduct) == xpad_device[i].idProduct))
+		    (le16_to_cpu(udev->descriptor.idProduct) == xpad_device[i].idProduct)) {
+			printk(KERN_ALERT "[xpad] xpad_probe  device found");
 			break;
+		}
 	}
 
 	xpad = kzalloc(sizeof(struct usb_xpad), GFP_KERNEL);
