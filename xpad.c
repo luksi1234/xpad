@@ -2501,6 +2501,6 @@ static struct usb_driver xpad_driver = {
 
 module_usb_driver(xpad_driver);
 
-MODULE_AUTHOR("Marko Friedemann <mfr@bmx-chemnitz.de>");
-MODULE_DESCRIPTION("X-Box pad driver");
+MODULE_AUTHOR("Lukas Praster");
+MODULE_DESCRIPTION("X-Box pad driver (patched)");
 MODULE_LICENSE("GPL");
