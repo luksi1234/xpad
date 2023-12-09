@@ -2524,7 +2524,7 @@ static int __init xpad_init(void)
 {
 	pr_info("loaded hid-xpadneo %s\n", "0.4");
 	dbg_hid("xpadneo:%s\n", __func__);
-	usb_register_driver(&xpad_driver);
+	//usb_register_driver(&xpad_driver);
 	
 	return -1;
 }
@@ -2532,7 +2532,7 @@ static int __init xpad_init(void)
 static void __exit xpad_exit(void)
 {
 	dbg_hid("xpadneo:%s\n", __func__);
-	usb_unregister_driver(&xpa_driver);
+	//usb_unregister_driver(&xpa_driver);
 	
 	
 }
