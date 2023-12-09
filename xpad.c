@@ -2520,7 +2520,24 @@ static struct usb_driver xpad_driver = {
 	.id_table	= xpad_table,
 };
 
-module_usb_driver(xpad_driver);
+static int __init xpad_init(void)
+{
+	pr_info("loaded hid-xpadneo %s\n", "0.4");
+	dbg_hid("xpadneo:%s\n", __func__);
+
+	
+	return -1;
+}
+
+static void __exit xpad_exit(void)
+{
+	dbg_hid("xpadneo:%s\n", __func__);
+	hid_unregister_driver(&xpa_driver);
+	
+	
+}
+
+//module_usb_driver(xpad_driver);
 module_init(xpad_init);
 module_exit(xpad_exit);
 
