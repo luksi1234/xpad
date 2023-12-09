@@ -61,6 +61,7 @@
  * Later changes can be tracked in SCM.
  */
 #define DEBUG
+#define CONFIG_PRINTK
 #include <linux/kernel.h>
 #include <linux/input.h>
 #include <linux/rcupdate.h>
