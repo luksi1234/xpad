@@ -61,6 +61,7 @@
  * Later changes can be tracked in SCM.
  */
 #define DEBUG
+#define DEBUG_VERBOSE
 #include <linux/kernel.h>
 #include <linux/input.h>
 #include <linux/rcupdate.h>
@@ -1458,7 +1459,7 @@ static int xpad_init_output(struct usb_interface *intf, struct usb_xpad *xpad,
 {
 	int error;
 
-	pr_info(KERN_ALERT "[xpad] xpad_init_output");
+	printk("xpad: %s\n", __func__);
 
 	if (xpad->xtype == XTYPE_UNKNOWN)
 		return 0;
@@ -1494,7 +1495,7 @@ err_free_coherent:
 
 static void xpad_stop_output(struct usb_xpad *xpad)
 {
-	pr_info(KERN_ALERT "[xpad] xpad_stop_output");
+	printk("xpad: %s\n", __func__);
 	if (xpad->xtype != XTYPE_UNKNOWN) {
 		if (!usb_wait_anchor_empty_timeout(&xpad->irq_out_anchor,
 						   5000)) {
@@ -1507,7 +1508,7 @@ static void xpad_stop_output(struct usb_xpad *xpad)
 
 static void xpad_deinit_output(struct usb_xpad *xpad)
 {
-	pr_info(KERN_ALERT "[xpad] xpad_deinit_output");
+	printk("xpad: %s\n", __func__);
 	if (xpad->xtype != XTYPE_UNKNOWN) {
 		usb_free_urb(xpad->irq_out);
 		usb_free_coherent(xpad->udev, XPAD_PKT_LEN,
@@ -1552,7 +1553,7 @@ static int xpad_start_xbox_one(struct usb_xpad *xpad)
 {
 	unsigned long flags;
 	int retval;
-	pr_info(KERN_ALERT "[xpad] xpad_start_xbox_one");
+	printk("xpad: %s\n", __func__);
 
 	spin_lock_irqsave(&xpad->odata_lock, flags);
 
@@ -1573,8 +1574,8 @@ static int xpad_start_xbox_360(struct usb_xpad *xpad)
 {
 	int status;
 
-	pr_info(KERN_ALERT "[xpad] xpad_start_xbox_360");
-
+	printk("xpad: %s\n", __func__);
+	
 	char *data = kzalloc(20, GFP_KERNEL);
 
 	int TIMEOUT = 100;
@@ -1947,7 +1948,7 @@ static void xpad_led_disconnect(struct usb_xpad *xpad) { }
 static int xpad_start_input(struct usb_xpad *xpad)
 {
 	int error;
-	pr_info(KERN_ALERT "[xpad] xpad_start_input");
+	printk("xpad: %s\n", __func__);
 
 	if (xpad->xtype == XTYPE_XBOX360) {
 		error = xpad_start_xbox_360(xpad);
@@ -1971,7 +1972,7 @@ static int xpad_start_input(struct usb_xpad *xpad)
 
 static void xpad_stop_input(struct usb_xpad *xpad)
 {
-	pr_info(KERN_ALERT "[xpad] xpad_stop_input");
+	printk("xpad: %s\n", __func__);
 	usb_kill_urb(xpad->irq_in);
 }
 
@@ -2058,7 +2059,7 @@ static void xpad_set_up_abs(struct input_dev *input_dev, signed short abs)
 {
 	struct usb_xpad *xpad = input_get_drvdata(input_dev);
 
-	pr_info(KERN_ALERT "[xpad] xpad_set_up_abs");
+	printk("xpad: %s\n", __func__);
 
 	switch (abs) {
 	case ABS_X:
@@ -2100,7 +2101,7 @@ static void xpad_set_up_abs(struct input_dev *input_dev, signed short abs)
 
 static void xpad_deinit_input(struct usb_xpad *xpad)
 {
-	pr_info(KERN_ALERT "[xpad] xpad_deinit_input");
+	printk("xpad: %s\n", __func__);
 	if (xpad->input_created) {
 		xpad->input_created = false;
 		xpad_led_disconnect(xpad);
@@ -2113,7 +2114,7 @@ static int xpad_init_input(struct usb_xpad *xpad)
 	struct input_dev *input_dev;
 	int i, error;
 
-	pr_info(KERN_ALERT "[xpad] xpad_init_input");
+	printk("xpad: %s\n", __func__);
 	
 	input_dev = input_allocate_device();
 	if (!input_dev)
@@ -2224,7 +2225,7 @@ static int xpad_probe(struct usb_interface *intf, const struct usb_device_id *id
 	struct usb_endpoint_descriptor *ep_irq_in, *ep_irq_out;
 	int i, error;
 
-	printk("[xpad] xpad_probe");
+	printk("xpad: %s\n", __func__);
 	
 
 	if (intf->cur_altsetting->desc.bNumEndpoints != 2)
@@ -2418,7 +2419,7 @@ static void xpad_disconnect(struct usb_interface *intf)
 {
 	struct usb_xpad *xpad = usb_get_intfdata(intf);
 
-	pr_info(KERN_ALERT "[xpad] xpad_disconnect");
+	printk("xpad: %s\n", __func__);
 
 	if (xpad->xtype == XTYPE_XBOX360W)
 		xpad360w_stop_input(xpad);
@@ -2453,7 +2454,7 @@ static int xpad_suspend(struct usb_interface *intf, pm_message_t message)
 	struct usb_xpad *xpad = usb_get_intfdata(intf);
 	struct input_dev *input = xpad->dev;
 
-	pr_info(KERN_ALERT "[xpad] xpad_suspend");
+	printk("xpad: %s\n", __func__);
 
 	if (xpad->xtype == XTYPE_XBOX360W) {
 		/*
@@ -2489,7 +2490,7 @@ static int xpad_resume(struct usb_interface *intf)
 	struct input_dev *input = xpad->dev;
 	int retval = 0;
 
-	pr_info(KERN_ALERT "[xpad] xpad_resume");
+	printk("xpad: %s\n", __func__);
 
 	if (xpad->xtype == XTYPE_XBOX360W) {
 		retval = xpad360w_start_input(xpad);
@@ -2523,7 +2524,7 @@ static struct usb_driver xpad_driver = {
 static int __init xpad_init(void)
 {
 	pr_info("loaded hid-xpadneo %s\n", "0.4");
-	printk("xpadneo:%s\n", __func__);
+	printk("xpad: %s\n", __func__);
 	//usb_register_driver(&xpad_driver);
 	
 	return -1;
@@ -2537,9 +2538,9 @@ static void __exit xpad_exit(void)
 	
 }
 
-//module_usb_driver(xpad_driver);
-module_init(xpad_init);
-module_exit(xpad_exit);
+module_usb_driver(xpad_driver);
+//module_init(xpad_init);
+//module_exit(xpad_exit);
 
 MODULE_AUTHOR("Lukas Praster");
 MODULE_DESCRIPTION("X-Box pad driver (patched)");
