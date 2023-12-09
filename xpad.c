@@ -61,7 +61,6 @@
  * Later changes can be tracked in SCM.
  */
 #define DEBUG
-#define CONFIG_PRINTK
 #include <linux/kernel.h>
 #include <linux/input.h>
 #include <linux/rcupdate.h>
@@ -2522,6 +2521,8 @@ static struct usb_driver xpad_driver = {
 };
 
 module_usb_driver(xpad_driver);
+module_init(xpad_init);
+module_exit(xpad_exit);
 
 MODULE_AUTHOR("Lukas Praster");
 MODULE_DESCRIPTION("X-Box pad driver (patched)");
