@@ -2225,6 +2225,8 @@ static int xpad_probe(struct usb_interface *intf, const struct usb_device_id *id
 	int i, error;
 
 	pr_info(KERN_ALERT "[xpad] xpad_probe");
+	dev_dbg(dev, "%s - urb shutting down with status: %d\n",
+			__func__, status);
 
 	if (intf->cur_altsetting->desc.bNumEndpoints != 2)
 		return -ENODEV;
